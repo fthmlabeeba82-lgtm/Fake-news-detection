@@ -1,13 +1,402 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Fake News Detection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FakeCheck - AI Fake News Detection</title>
+
+    <link rel="stylesheet" href="{% static 'app/style.css' %}">
 </head>
+
 <body>
 
-    <h1>Welcome to Fake News Detection</h1>
+<!-- ================= NAVBAR ================= -->
 
-    <p>You have successfully logged in!</p>
+<header class="navbar">
+
+    <div class="logo">
+        <span class="logo-icon">⌕</span>
+        <span>Fake<span>Check</span></span>
+    </div>
+
+    <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#about">About</a>
+        <a href="#history">History</a>
+    </nav>
+
+    <div class="user-area">
+
+        <div class="user-info">
+            <div class="user-avatar">👤</div>
+
+            <span>
+                {{ request.user.first_name|default:request.user.username }}
+            </span>
+
+            <span class="arrow">⌄</span>
+        </div>
+
+        <a href="#" class="logout-btn">
+            ⇥ Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ================= HERO SECTION ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-text">
+
+            <h1>
+                Detect
+                <span>Fake News</span>
+                <br>
+                with AI
+            </h1>
+
+            <h2>
+                Verify information before you trust it.
+            </h2>
+
+            <p>
+                Paste a news article or upload an image and
+                let our AI analyze it to find out whether
+                it's <strong class="real">REAL</strong>
+                or <strong class="fake">FAKE</strong>.
+            </p>
+
+        </div>
+
+
+        <!-- RIGHT SIDE ILLUSTRATION -->
+
+        <div class="hero-illustration">
+
+            <div class="news-paper">
+
+                <div class="paper-title">
+                    NEWS
+                </div>
+
+                <div class="paper-lines"></div>
+                <div class="paper-lines"></div>
+                <div class="paper-lines"></div>
+
+                <div class="fake-stamp">
+                    FAKE
+                </div>
+
+            </div>
+
+            <div class="robot">
+                🤖
+            </div>
+
+            <div class="shield">
+                ✓
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= NEWS INPUT CARD ================= -->
+
+    <div class="news-card">
+
+        <div class="card-title">
+            📰
+            <span>News Article</span>
+        </div>
+
+
+        <div class="news-input-wrapper">
+
+            <textarea
+                id="newsText"
+                placeholder="Paste your news article here..."
+            ></textarea>
+
+
+            <!-- IMAGE PREVIEW -->
+
+            <div id="imagePreviewContainer"
+                 class="image-preview-container hidden">
+
+                <img id="imagePreview"
+                     src=""
+                     alt="Selected image">
+
+                <div class="image-details">
+
+                    <span id="imageName">
+                        image.jpg
+                    </span>
+
+                    <small id="imageSize">
+                        0 KB
+                    </small>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="removeImage"
+                    class="remove-image">
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- INPUT ACTIONS -->
+
+            <div class="input-actions">
+
+                <span class="file-info">
+                    JPG, PNG (Max 5MB)
+                </span>
+
+                <label
+                    for="imageUpload"
+                    class="image-upload-btn">
+
+                    🖼️
+                    <span>Add Image</span>
+
+                </label>
+
+                <input
+                    type="file"
+                    id="imageUpload"
+                    accept="image/png, image/jpeg, image/jpg"
+                    hidden>
+
+            </div>
+
+        </div>
+
+
+        <!-- CHECK BUTTON -->
+
+        <button
+            type="button"
+            class="check-btn"
+            id="checkNews">
+
+            🔍
+            Check News
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================= HOW IT WORKS ================= -->
+
+<section class="how-it-works" id="about">
+
+    <h2>How It Works</h2>
+
+    <div class="section-line"></div>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-icon blue">
+                📝
+            </div>
+
+            <h3>1. Enter News</h3>
+
+            <p>
+                Paste the news article or
+                upload an image.
+            </p>
+
+        </div>
+
+
+        <div class="arrow-between">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon purple">
+                🤖
+            </div>
+
+            <h3>2. AI Analysis</h3>
+
+            <p>
+                Our AI analyzes the content
+                using machine learning.
+            </p>
+
+        </div>
+
+
+        <div class="arrow-between">
+            →
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-icon green">
+                ✓
+            </div>
+
+            <h3>3. Get Result</h3>
+
+            <p>
+                Find out whether the news
+                is REAL or FAKE.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= WHY FAKECHECK ================= -->
+
+<section class="why-section" id="history">
+
+    <h2>Why use FakeCheck?</h2>
+
+    <div class="section-line"></div>
+
+
+    <div class="features">
+
+        <div class="feature-card">
+
+            <div class="feature-icon purple-icon">
+                🧠
+            </div>
+
+            <div>
+                <h3>AI-Powered Analysis</h3>
+
+                <p>
+                    Uses machine learning
+                    to analyze news content.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon yellow-icon">
+                ⚡
+            </div>
+
+            <div>
+                <h3>Quick Prediction</h3>
+
+                <p>
+                    Get results quickly
+                    and easily.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon green-icon">
+                🛡️
+            </div>
+
+            <div>
+                <h3>Simple & Easy</h3>
+
+                <p>
+                    Just paste or upload
+                    and check.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon pink-icon">
+                👥
+            </div>
+
+            <div>
+                <h3>Helpful Results</h3>
+
+                <p>
+                    Understand news before
+                    trusting or sharing it.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <div class="footer-logo">
+        Fake<span>Check</span>
+    </div>
+
+    <p>
+        AI-Powered Fake News Detection
+    </p>
+
+    <div class="footer-links">
+
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#history">History</a>
+        <a href="#">Contact</a>
+
+    </div>
+
+    <p class="copyright">
+        © 2026 FakeCheck. All rights reserved.
+    </p>
+
+</footer>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script src="{% static 'app/script.js' %}"></script>
 
 </body>
 </html>
