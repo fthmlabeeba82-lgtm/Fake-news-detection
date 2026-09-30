@@ -1,30 +1,145 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FakeCheck - Login</title>
+
+    <link rel="stylesheet" href="{% static 'app/style.css' %}">
 </head>
-<body>
 
-    <h1>Login</h1>
+<body class="auth-page">
 
-    <form method="POST">
-        {% csrf_token %}
+    <div class="auth-container">
 
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <br><br>
+        <!-- Left Side -->
+        <div class="auth-left">
 
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <br><br>
+            <div class="auth-brand">
+                <span class="auth-logo-icon">⌕</span>
+                <span>Fake<span>Check</span></span>
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            <div class="auth-left-content">
 
-    <p>
-        Don't have an account?
-        <a href="{% url 'register' %}">Register here</a>
-    </p>
+                <h1>
+                    Detect Fake News.<br>
+                    <span>Trust What Matters.</span>
+                </h1>
+
+                <p>
+                    Use AI-powered technology to analyze news
+                    and identify potentially misleading information.
+                </p>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>AI-powered news analysis</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Quick and simple predictions</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Verify information before sharing</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Right Side -->
+        <div class="auth-right">
+
+            <div class="register-card">
+
+                <div class="auth-heading">
+
+                    <h2>Welcome Back</h2>
+
+                    <p>
+                        Login to continue using FakeCheck
+                    </p>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- Username -->
+
+                    <div class="form-group">
+
+                        <label>Username</label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                            required>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            required>
+
+                    </div>
+
+
+                    <!-- Login Button -->
+
+                    <button
+                        type="submit"
+                        class="auth-button">
+
+                        Login
+
+                    </button>
+
+                </form>
+
+
+                <!-- Register Link -->
+
+                <div class="auth-switch">
+
+                    <span>
+                        Don't have an account?
+                    </span>
+
+                    <a href="{% url 'register' %}">
+                        Create Account
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>

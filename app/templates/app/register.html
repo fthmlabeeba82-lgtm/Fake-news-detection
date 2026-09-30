@@ -1,33 +1,207 @@
+{% load static %}
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Registration</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FakeCheck - Create Account</title>
+
+    <link rel="stylesheet" href="{% static 'app/style.css' %}">
 </head>
-<body>
 
-    <h1>Create Account</h1>
+<body class="auth-page">
 
-    <form method="POST">
-        {% csrf_token %}
+    <div class="auth-container">
 
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <br><br>
+        <!-- Left Side -->
+        <div class="auth-left">
 
-        <label>Email:</label>
-        <input type="email" name="email" required>
-        <br><br>
+            <div class="auth-brand">
+                <span class="auth-logo-icon">⌕</span>
+                <span>Fake<span>Check</span></span>
+            </div>
 
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <br><br>
+            <div class="auth-left-content">
 
-        <label>Confirm Password:</label>
-        <input type="password" name="confirm_password" required>
-        <br><br>
+                <h1>
+                    Detect Fake News.<br>
+                    <span>Trust What Matters.</span>
+                </h1>
 
-        <button type="submit">Register</button>
-    </form>
+                <p>
+                    Use AI-powered technology to analyze news
+                    and identify potentially misleading information.
+                </p>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>AI-powered news analysis</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Quick and simple predictions</p>
+                </div>
+
+                <div class="auth-feature">
+                    <span>✓</span>
+                    <p>Verify information before sharing</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Right Side -->
+        <div class="auth-right">
+
+            <div class="register-card">
+
+                <div class="auth-heading">
+
+                    <h2>Create your account</h2>
+
+                    <p>
+                        Join FakeCheck and start verifying news
+                    </p>
+
+                </div>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+
+                    <!-- First & Last Name -->
+
+                    <div class="name-row">
+
+                        <div class="form-group">
+
+                            <label>First Name</label>
+
+                            <input
+                                type="text"
+                                name="first_name"
+                                placeholder="Enter first name"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Last Name</label>
+
+                            <input
+                                type="text"
+                                name="last_name"
+                                placeholder="Enter last name"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Username -->
+
+                    <div class="form-group">
+
+                        <label>Username</label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Choose a username"
+                            required>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="form-group">
+
+                        <label>Email Address</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            required>
+
+                    </div>
+
+
+                    <!-- Password -->
+
+                    <div class="form-group">
+
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Create a password"
+                            required>
+
+                    </div>
+
+
+                    <!-- Confirm Password -->
+
+                    <div class="form-group">
+
+                        <label>Confirm Password</label>
+
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            placeholder="Confirm your password"
+                            required>
+
+                    </div>
+
+
+                    <!-- Register Button -->
+
+                    <button
+                        type="submit"
+                        class="auth-button">
+
+                        Create Account
+
+                    </button>
+
+                </form>
+
+
+                <!-- Login Link -->
+
+                <div class="auth-switch">
+
+                    <span>
+                        Already have an account?
+                    </span>
+
+                    <a href="{% url 'login' %}">
+                        Login
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>
