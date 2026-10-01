@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About | FakeCheck</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #0b1f3a;
+            color: white;
+            padding: 18px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #b8d8ff;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #0b1f3a !important;
+            padding: 9px 16px;
+            border-radius: 7px;
+            font-weight: 600;
+        }
+
+        /* Main */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .title h1 {
+            font-size: 32px;
+            color: #0b1f3a;
+            margin-bottom: 10px;
+        }
+
+        .title p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Cards */
+        .about-card {
+            background: white;
+            padding: 30px;
+            margin-bottom: 22px;
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .about-card h2 {
+            color: #0b1f3a;
+            margin-bottom: 14px;
+            font-size: 21px;
+        }
+
+        .about-card p {
+            color: #4b5563;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .feature-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            color: #0b1f3a;
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .feature p {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 18px 20px;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+
+        <div class="logo">
+            FakeCheck
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'history' %}">
+                History
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-btn">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <div class="title">
+
+            <h1>About FakeCheck</h1>
+
+            <p>
+                Learn more about our Fake News Detection project.
+            </p>
+
+        </div>
+
+
+        <div class="about-card">
+
+            <h2>What is FakeCheck?</h2>
+
+            <p>
+                FakeCheck is a web-based fake news detection system
+                designed to help users analyze news articles and identify
+                whether the information is likely to be real or fake.
+                The project combines a user-friendly web interface with
+                Artificial Intelligence and Machine Learning techniques.
+            </p>
+
+        </div>
+
+
+        <div class="about-card">
+
+            <h2>How Does It Work?</h2>
+
+            <p>
+                Users can submit a news article through the application.
+                The submitted text will be processed by a Machine Learning
+                model, which will analyze the content and provide a
+                prediction along with a confidence value.
+            </p>
+
+        </div>
+
+
+        <div class="about-card">
+
+            <h2>Project Technologies</h2>
+
+            <p>
+                <strong>Frontend:</strong> HTML, CSS and JavaScript<br><br>
+
+                <strong>Backend:</strong> Python and Django<br><br>
+
+                <strong>Database:</strong> SQLite<br><br>
+
+                <strong>Machine Learning:</strong> Python, Scikit-learn
+            </p>
+
+        </div>
+
+
+        <div class="features">
+
+            <div class="feature">
+
+                <div class="feature-icon">🤖</div>
+
+                <h3>AI Based</h3>
+
+                <p>
+                    Uses Machine Learning techniques to analyze news content.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">🔐</div>
+
+                <h3>Secure Login</h3>
+
+                <p>
+                    User authentication keeps personal history connected
+                    to individual accounts.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">📋</div>
+
+                <h3>News History</h3>
+
+                <p>
+                    Users can view their previously submitted news articles.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

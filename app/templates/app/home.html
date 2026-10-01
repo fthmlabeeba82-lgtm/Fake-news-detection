@@ -7,6 +7,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+
     <title>FakeCheck - AI Fake News Detection</title>
 
     <link rel="stylesheet" href="{% static 'app/style.css' %}">
@@ -23,29 +27,50 @@
         <span>Fake<span>Check</span></span>
     </div>
 
-    <nav>
-        <a href="#" class="active">Home</a>
-        <a href="#about">About</a>
-        <a href="#history">History</a>
+    <nav> 
+        <a href="{% url 'home' %}" class="active">Home</a> 
+        <a href="{% url 'about' %}">About</a> 
+        <a href="{% url 'history' %}">History</a> 
     </nav>
 
     <div class="user-area">
 
-        <div class="user-info">
-            <div class="user-avatar">👤</div>
+    <div class="user-info" id="userMenuButton">
 
-            <span>
-                {{ request.user.first_name|default:request.user.username }}
-            </span>
-
-            <span class="arrow">⌄</span>
+        <div class="user-avatar">
+            👤
         </div>
 
-        <a href="#" class="logout-btn">
+        <span>
+            {{ request.user.first_name|default:request.user.username }}
+        </span>
+
+        <span class="arrow">
+            ⌄
+        </span>
+
+    </div>
+
+
+    <div class="user-dropdown" id="userDropdown">
+
+        <div class="dropdown-user">
+            <strong>
+                {{ request.user.first_name|default:request.user.username }}
+            </strong>
+
+            <small>
+                {{ request.user.email }}
+            </small>
+        </div>
+
+        <a href="{% url 'logout' %}">
             ⇥ Logout
         </a>
 
     </div>
+
+</div>
 
 </header>
 
@@ -116,16 +141,21 @@
 
     <div class="news-card">
 
-        <div class="card-title">
+        <form method="POST" action="{% url 'check_news' %}">
+
+            {% csrf_token %}
+
+           <div class="card-title">
             📰
-            <span>News Article</span>
-        </div>
+               <span>News Article</span>
+           </div>
 
 
         <div class="news-input-wrapper">
 
             <textarea
                 id="newsText"
+                name="news_text"
                 placeholder="Paste your news article here..."
             ></textarea>
 
@@ -192,14 +222,15 @@
         <!-- CHECK BUTTON -->
 
         <button
-            type="button"
+            type="submit"
             class="check-btn"
             id="checkNews">
-
             🔍
             Check News
 
         </button>
+
+      </form>
 
     </div>
 
@@ -395,6 +426,25 @@
 
 
 <!-- ================= JAVASCRIPT ================= -->
+<script>
+    const userMenuButton = document.getElementById("userMenuButton");
+    const userDropdown = document.getElementById("userDropdown");
+
+    userMenuButton.addEventListener("click", function () {
+        userDropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (event) {
+
+        if (
+            !userMenuButton.contains(event.target) &&
+            !userDropdown.contains(event.target)
+        ) {
+            userDropdown.classList.remove("show");
+        }
+
+    });
+</script>
 
 <script src="{% static 'app/script.js' %}"></script>
 

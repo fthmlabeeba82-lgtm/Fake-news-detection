@@ -1039,3 +1039,75 @@ footer .copyright {
         font-size: 30px;
     }
 }
+
+/* User Dropdown */
+
+.user-area {
+    position: relative;
+}
+
+.user-info {
+    cursor: pointer;
+}
+
+.user-area {
+    position: relative;
+}
+
+.user-info {
+    cursor: pointer;
+}
+
+.user-dropdown {
+    display: none !important;
+    position: absolute !important;
+    right: 0;
+    top: 55px;
+    width: 210px;
+    background: white;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+}
+
+.user-dropdown.show {
+    display: block !important;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.dropdown-user {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 5px;
+}
+
+.dropdown-user strong {
+    display: block;
+    color: #0b1f3a;
+    font-size: 14px;
+}
+
+.dropdown-user small {
+    display: block;
+    color: #777;
+    font-size: 12px;
+    margin-top: 4px;
+    word-break: break-word;
+}
+
+.user-dropdown a {
+    display: block;
+    padding: 10px;
+    color: #0b1f3a;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.user-dropdown a:hover {
+    background: #f1f5f9;
+}
