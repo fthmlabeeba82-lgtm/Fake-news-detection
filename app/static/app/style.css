@@ -1111,3 +1111,32 @@ footer .copyright {
 .user-dropdown a:hover {
     background: #f1f5f9;
 }
+
+
+/* Password Show/Hide */
+.password-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.password-wrapper input {
+    flex: 1;
+    width: 100%;
+    padding-right: 65px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.toggle-password:hover {
+    color: #1d4ed8;
+}

@@ -127,3 +127,20 @@ checkNews.addEventListener("click", function () {
 
 
 });
+
+
+function togglePassword(inputId, button) {
+    const passwordInput = document.getElementById(inputId);
+
+    if (!passwordInput) return;
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        button.textContent = "Hide";
+        button.setAttribute("aria-label", "Hide password");
+    } else {
+        passwordInput.type = "password";
+        button.textContent = "Show";
+        button.setAttribute("aria-label", "Show password");
+    }
+}
