@@ -1,0 +1,203 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | Fake News Detection</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fb;
+            color: #202b3c;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .result-card {
+            width: 100%;
+            max-width: 720px;
+            background: white;
+            border-radius: 18px;
+            padding: 36px;
+            box-shadow: 0 10px 35px rgba(30, 50, 80, 0.10);
+        }
+
+        .brand {
+            text-align: center;
+            color: #3559d8;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 14px 0 8px;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 28px;
+        }
+
+        .prediction {
+            text-align: center;
+            padding: 25px 16px;
+            border-radius: 14px;
+            background: #f0f4ff;
+            margin-bottom: 25px;
+        }
+
+        .prediction-label {
+            color: #65718a;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .prediction-value {
+            font-size: 34px;
+            font-weight: bold;
+            overflow-wrap: anywhere;
+        }
+
+        .real {
+            color: #168052;
+        }
+
+        .fake {
+            color: #d43e4f;
+        }
+
+        .confidence {
+            margin-top: 12px;
+            font-size: 16px;
+            color: #48566b;
+        }
+
+        .section-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .news-text {
+            background: #f7f9fc;
+            border: 1px solid #e4e9f1;
+            border-radius: 10px;
+            padding: 16px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+
+        .note {
+            color: #7b8495;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 26px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
+            padding: 13px 18px;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .home-btn {
+            background: #3559d8;
+            color: white;
+        }
+
+        .history-btn {
+            background: white;
+            color: #3559d8;
+            border: 1px solid #3559d8;
+        }
+
+        @media (max-width: 500px) {
+            .result-card {
+                padding: 24px 18px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+
+            .prediction-value {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="result-card">
+        <div class="brand">AI Powered Analysis</div>
+
+        <h1>News Prediction Result</h1>
+
+        <p class="subtitle">
+            Your news article has been analyzed by our model.
+        </p>
+
+        <section class="prediction">
+            <div class="prediction-label">Predicted Category</div>
+
+            <div class="prediction-value
+                {% if prediction == 'REAL' %}real{% elif prediction == 'FAKE' %}fake{% endif %}">
+                {{ prediction }}
+            </div>
+
+            <div class="confidence">
+                Confidence: {{ confidence|floatformat:2 }}%
+            </div>
+        </section>
+
+        <h2 class="section-title">Submitted News</h2>
+
+        <div class="news-text">{{ news_text }}</div>
+
+        <p class="note">
+            Note: This result is an AI model prediction, not a guarantee
+            that the news is true or false. Please verify important claims
+            using reliable sources.
+        </p>
+
+        <div class="actions">
+            <a href="{% url 'home' %}" class="btn home-btn">
+                ← Back to Home
+            </a>
+
+            <a href="{% url 'history' %}" class="btn history-btn">
+                View History
+            </a>
+        </div>
+    </main>
+</body>
+</html>

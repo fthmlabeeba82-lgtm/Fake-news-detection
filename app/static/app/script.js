@@ -125,8 +125,5 @@ checkNews.addEventListener("click", function () {
     // Temporary message
     // ML model will be connected later
 
-    alert(
-        "News submitted successfully! AI prediction will be connected soon."
-    );
 
 });

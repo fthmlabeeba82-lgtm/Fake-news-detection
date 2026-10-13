@@ -12,6 +12,7 @@ import os
 import re
 import joblib
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 MODEL_DIR = os.path.join(settings.BASE_DIR, "models")
 
@@ -109,9 +110,25 @@ def history(request):
         {"predictions": predictions}
     )
 
+
+@login_required(login_url='login')
+def delete_prediction(request, prediction_id):
+    if request.method == "POST":
+        prediction = get_object_or_404(
+            NewsPrediction,
+            id=prediction_id,
+            user=request.user
+        )
+        prediction.delete()
+        messages.success(request, "News deleted successfully!")
+
+    return redirect("history")
+
+
 @login_required(login_url='login')
 def about(request):
     return render(request, "app/about.html")
+
 
 
 @login_required(login_url='login')
@@ -139,16 +156,13 @@ def check_news(request):
             confidence=confidence
         )
 
-        messages.success(
-            request,
-            f"AI Prediction: {prediction} ({confidence:.2f}% confidence)"
-        )
+        
 
-        return render(request, "app/home.html", {
-    "prediction": prediction,
-    "confidence": confidence,
-    "news_text": news_text
-})
+        return render(request, "app/result.html", {
+            "prediction": prediction,
+            "confidence": confidence,
+            "news_text": news_text
+        })
 
     return redirect("home")
 
