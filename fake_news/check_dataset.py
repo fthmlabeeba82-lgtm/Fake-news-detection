@@ -1,5 +1,7 @@
 import pandas as pd
 import re
+import joblib
+
 
 fake_news = pd.read_csv("dataset/Fake.csv")
 real_news = pd.read_csv("dataset/True.csv")
@@ -26,3 +28,60 @@ print(data["text"].iloc[0][:300])
 
 print("\nCleaned:")
 print(data["clean_text"].iloc[0][:300])
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer(
+    max_features=10000,
+    ngram_range=(1, 2),
+    sublinear_tf=True
+)
+
+X = vectorizer.fit_transform(data["clean_text"])
+
+print("\nTF-IDF shape:")
+print(X.shape)
+
+from sklearn.model_selection import train_test_split
+
+y = data["label"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+print("\nTraining data:", X_train.shape)
+print("Testing data:", X_test.shape)
+
+from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(max_iter=1000)
+
+model.fit(X_train, y_train)
+
+print("\nModel training completed!")
+
+y_pred = model.predict(X_test)
+
+print("\nFirst 10 predictions:")
+print(y_pred[:10])
+
+from sklearn.metrics import accuracy_score
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("\nAccuracy:", accuracy)
+print("Accuracy percentage:", accuracy * 100, "%")
+
+from sklearn.metrics import classification_report
+
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+
+joblib.dump(model, "models/fake_news_model.pkl")
+joblib.dump(vectorizer, "models/tfidf_vectorizer.pkl")
+
+print("\nModel saved successfully!")
