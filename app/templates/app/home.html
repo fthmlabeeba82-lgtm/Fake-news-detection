@@ -83,6 +83,10 @@
 
         <div class="hero-text">
 
+            <div class="welcome-badge">
+                👋 Welcome back, {{ request.user.first_name|default:request.user.username }}!
+            </div>
+
             <h1>
                 Detect
                 <span>Fake News</span>
