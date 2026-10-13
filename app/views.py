@@ -8,6 +8,27 @@ from .models import NewsPrediction
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+import os
+import re
+import joblib
+from django.conf import settings
+
+MODEL_DIR = os.path.join(settings.BASE_DIR, "models")
+
+model = joblib.load(
+    os.path.join(MODEL_DIR, "fake_news_model.pkl")
+)
+
+vectorizer = joblib.load(
+    os.path.join(MODEL_DIR, "tfidf_vectorizer.pkl")
+)
+
+
+def clean_news_text(text):
+    text = text.lower()
+    text = re.sub(r'[^a-zA-Z\s]', '', text)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
 
 
 def register(request):
@@ -92,28 +113,45 @@ def history(request):
 def about(request):
     return render(request, "app/about.html")
 
+
 @login_required(login_url='login')
 def check_news(request):
-
     if request.method == "POST":
-
-        news_text = request.POST.get("news_text")
+        news_text = request.POST.get("news_text", "").strip()
 
         if not news_text:
             messages.error(request, "Please enter a news article.")
             return redirect("home")
 
+        cleaned_text = clean_news_text(news_text)
+
+        features = vectorizer.transform([cleaned_text])
+
+        prediction = model.predict(features)[0]
+
+        probabilities = model.predict_proba(features)[0]
+        confidence = float(max(probabilities) * 100)
+
         NewsPrediction.objects.create(
             user=request.user,
             news_text=news_text,
-            prediction="PENDING"
+            prediction=prediction,
+            confidence=confidence
         )
 
-        messages.success(request, "News submitted successfully!")
+        messages.success(
+            request,
+            f"AI Prediction: {prediction} ({confidence:.2f}% confidence)"
+        )
 
-        return redirect("home")
+        return render(request, "app/home.html", {
+    "prediction": prediction,
+    "confidence": confidence,
+    "news_text": news_text
+})
 
     return redirect("home")
+
 
 class JWTTestView(APIView):
     permission_classes = [IsAuthenticated]

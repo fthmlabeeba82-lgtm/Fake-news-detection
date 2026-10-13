@@ -232,6 +232,24 @@
 
       </form>
 
+      
+{% if prediction %}
+<div class="prediction-result">
+    <h3>AI Prediction Result</h3>
+
+    <p>
+        <strong>Prediction:</strong>
+        {{ prediction }}
+    </p>
+
+    <p>
+        <strong>Confidence:</strong>
+        {{ confidence|floatformat:2 }}%
+    </p>
+</div>
+{% endif %}
+
+
     </div>
 
 </section>
