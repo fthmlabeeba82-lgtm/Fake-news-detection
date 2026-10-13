@@ -7,6 +7,7 @@ urlpatterns = [
     path("home/", views.home, name="home"),
     path("about/", views.about, name="about"),
     path("history/", views.history, name="history"),
+    path("clear-history/", views.clear_history, name="clear_history"),
     path(
     "delete-prediction/<int:prediction_id>/",
     views.delete_prediction,

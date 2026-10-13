@@ -181,6 +181,28 @@
             background: #16365f;
         }
 
+
+.clear-history-form {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.clear-history-btn {
+    background: #991b1b;
+    color: white;
+    border: none;
+    padding: 11px 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.clear-history-btn:hover {
+    background: #7f1d1d;
+}
+
+
         /* Mobile */
         @media (max-width: 700px) {
             .navbar {
@@ -251,6 +273,21 @@
 
 
         {% if predictions %}
+
+        
+<form method="POST"
+      action="{% url 'clear_history' %}"
+      class="clear-history-form"
+      onsubmit="return confirm('Are you sure you want to delete ALL your news history? This action cannot be undone.');">
+
+    {% csrf_token %}
+
+    <button type="submit" class="clear-history-btn">
+        🗑 Clear All History
+    </button>
+
+</form>
+
 
             {% for prediction in predictions %}
 

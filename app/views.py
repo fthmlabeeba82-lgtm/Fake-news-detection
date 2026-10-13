@@ -126,6 +126,21 @@ def delete_prediction(request, prediction_id):
 
 
 @login_required(login_url='login')
+def clear_history(request):
+    if request.method == "POST":
+        NewsPrediction.objects.filter(
+            user=request.user
+        ).delete()
+
+        messages.success(
+            request,
+            "Your news history has been cleared successfully!"
+        )
+
+    return redirect("history")
+
+
+@login_required(login_url='login')
 def about(request):
     return render(request, "app/about.html")
 
