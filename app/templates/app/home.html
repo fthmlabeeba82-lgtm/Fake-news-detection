@@ -145,7 +145,7 @@
 
     <div class="news-card">
 
-        <form method="POST" action="{% url 'check_news' %}">
+        <form method="POST" action="{% url 'check_news' %}" enctype="multipart/form-data">
 
             {% csrf_token %}
 
@@ -212,11 +212,11 @@
 
                 </label>
 
-                <input
-                    type="file"
-                    id="imageUpload"
-                    accept="image/png, image/jpeg, image/jpg"
-                    hidden>
+                <input type="file"
+                       id="imageUpload"
+                       name="news_image"
+                       accept="image/png, image/jpeg, image/jpg"
+                       hidden>
 
             </div>
 
