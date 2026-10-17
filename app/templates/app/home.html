@@ -163,7 +163,15 @@
                 placeholder="Paste your news article here..."
             ></textarea>
 
+        <div id="ocrStatus" style="display: none; margin-top: 10px;"></div>
 
+        <button
+            type="button"
+            id="extractTextBtn"
+            class="check-btn"
+            style="display: none; margin-top: 10px;">
+         Extract Text from Image
+        </button>
             <!-- IMAGE PREVIEW -->
 
             <div id="imagePreviewContainer"
@@ -469,6 +477,7 @@
 </script>
 
 <script src="{% static 'app/script.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 </body>
 </html>

@@ -144,3 +144,110 @@ function togglePassword(inputId, button) {
         button.setAttribute("aria-label", "Show password");
     }
 }
+
+
+const extractTextBtn = document.getElementById("extractTextBtn");
+const ocrStatus = document.getElementById("ocrStatus");
+const newsText = document.getElementById("newsText");
+
+if (extractTextBtn && ocrStatus && imageUpload && newsText) {
+    extractTextBtn.addEventListener("click", async function () {
+        const file = imageUpload.files[0];
+
+        if (!file) {
+            ocrStatus.style.display = "block";
+            ocrStatus.textContent = "Aadyam oru image upload cheyyuka.";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("news_image", file);
+
+        extractTextBtn.disabled = true;
+        ocrStatus.style.display = "block";
+        ocrStatus.textContent = "Image vaayikkunnu...";
+
+        try {
+            const response = await fetch("/extract-image-text/", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": document.querySelector(
+                        "[name=csrfmiddlewaretoken]"
+                    ).value
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Text extract cheyyan kazhinjilla.");
+            }
+
+            newsText.value = data.text;
+            ocrStatus.textContent =
+                "Text extract cheythu! News check cheyyunnathinu munpu text verify cheyyuka.";
+
+        } catch (error) {
+            ocrStatus.textContent = error.message;
+        } finally {
+            extractTextBtn.disabled = false;
+        }
+    });
+}
+
+async function extractTextFromImage(file) {
+    const status = document.getElementById("ocrStatus");
+    const newsText = document.getElementById("newsText");
+
+    if (!file || !status || !newsText) {
+        return;
+    }
+
+    status.style.display = "block";
+    status.textContent = "Image-il ninn text extract cheyyunnu...";
+
+    try {
+        const result = await Tesseract.recognize(file, "eng", {
+            logger: (message) => {
+                if (message.status === "recognizing text") {
+                    status.textContent =
+                        `Text vaayikkunnu: ${Math.round(message.progress * 100)}%`;
+                }
+            }
+        });
+
+        const extractedText = result.data.text.trim();
+
+        if (!extractedText) {
+            status.textContent = "Image-il text kandethaan kazhinjilla.";
+            return;
+        }
+
+        newsText.value = extractedText;
+        status.textContent =
+            "Text extract cheythu! Prediction-nu munpu text verify cheyyuka.";
+
+    } catch (error) {
+        status.textContent =
+            "OCR load cheyyaan kazhinjilla. Internet connection check cheyyuka.";
+        console.error(error);
+    }
+}
+
+const ocrImageUpload = document.getElementById("imageUpload");
+
+if (ocrImageUpload && extractTextBtn) {
+    ocrImageUpload.addEventListener("change", function () {
+        extractTextBtn.style.display =
+            ocrImageUpload.files.length > 0 ? "block" : "none";
+    });
+
+    extractTextBtn.addEventListener("click", function () {
+        const file = ocrImageUpload.files[0];
+
+        if (file) {
+            extractTextFromImage(file);
+        }
+    });
+}

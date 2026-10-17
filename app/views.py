@@ -13,6 +13,9 @@ import re
 import joblib
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from PIL import Image
+import numpy as np
+from django.http import JsonResponse
 
 MODEL_DIR = os.path.join(settings.BASE_DIR, "models")
 
@@ -150,15 +153,39 @@ def about(request):
 def check_news(request):
     if request.method == "POST":
         news_text = request.POST.get("news_text", "").strip()
+        news_image = request.FILES.get("news_image")
 
+        # Image-il ninn text vaayikkuka
+        if not news_text and news_image:
+            try:
+                image = Image.open(news_image).convert("RGB")
+                image_array = np.array(image)
+
+                ocr_engine = RapidOCR()
+                result, _ = ocr_engine(image_array)
+
+                if result:
+                    news_text = " ".join(
+                        item[1] for item in result if item[1].strip()
+                    ).strip()
+
+            except Exception as e:
+                messages.error(
+                    request,
+                    "Image vaayikkan kazhinjilla. Vere oru image try cheyyuka."
+                )
+                return redirect("home")
+
+        # Text-um image text-um illenkil
         if not news_text:
-            messages.error(request, "Please enter a news article.")
+            messages.error(
+                request,
+                "News text type cheyyukayo news image upload cheyyukayo cheyyuka."
+            )
             return redirect("home")
 
         cleaned_text = clean_news_text(news_text)
-
         features = vectorizer.transform([cleaned_text])
-
         prediction = model.predict(features)[0]
 
         probabilities = model.predict_proba(features)[0]
@@ -171,8 +198,6 @@ def check_news(request):
             confidence=confidence
         )
 
-        
-
         return render(request, "app/result.html", {
             "prediction": prediction,
             "confidence": confidence,
@@ -180,6 +205,25 @@ def check_news(request):
         })
 
     return redirect("home")
+
+
+@login_required(login_url='login')
+def extract_image_text(request):
+    if request.method != "POST":
+        return JsonResponse(
+            {"error": "Invalid request."},
+            status=405
+        )
+
+    return JsonResponse(
+        {
+            "error": (
+                "Image text extraction temporarily unavailable. "
+                "Please type or paste the news text manually."
+            )
+        },
+        status=503
+    )
 
 
 class JWTTestView(APIView):

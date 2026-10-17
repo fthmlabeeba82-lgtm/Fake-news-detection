@@ -20,4 +20,9 @@ urlpatterns = [
     path("api/jwt-test/", views.JWTTestView.as_view(), name="jwt_test"),
     path(
     "api/check-news/",views.CheckNewsAPIView.as_view(),name="api_check_news"),
+    path(
+    "extract-image-text/",
+    views.extract_image_text,
+    name="extract_image_text"
+),
 ]
