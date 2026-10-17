@@ -155,26 +155,14 @@ def check_news(request):
         news_text = request.POST.get("news_text", "").strip()
         news_image = request.FILES.get("news_image")
 
-        # Image-il ninn text vaayikkuka
+                # Image-il ninn text vaayikkuka
         if not news_text and news_image:
-            try:
-                image = Image.open(news_image).convert("RGB")
-                image_array = np.array(image)
-
-                ocr_engine = RapidOCR()
-                result, _ = ocr_engine(image_array)
-
-                if result:
-                    news_text = " ".join(
-                        item[1] for item in result if item[1].strip()
-                    ).strip()
-
-            except Exception as e:
-                messages.error(
-                    request,
-                    "Image vaayikkan kazhinjilla. Vere oru image try cheyyuka."
-                )
-                return redirect("home")
+            messages.error(
+                request,
+                "Image-il ninn text extract cheythilla. "
+                "Extract Text button use cheyyuka."
+            )
+            return redirect("home")
 
         # Text-um image text-um illenkil
         if not news_text:

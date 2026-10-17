@@ -236,6 +236,8 @@ async function extractTextFromImage(file) {
 }
 
 const ocrImageUpload = document.getElementById("imageUpload");
+const checkNewsButton = document.getElementById("checkNews");
+const newsForm = document.querySelector("form");
 
 if (ocrImageUpload && extractTextBtn) {
     ocrImageUpload.addEventListener("change", function () {
@@ -243,11 +245,45 @@ if (ocrImageUpload && extractTextBtn) {
             ocrImageUpload.files.length > 0 ? "block" : "none";
     });
 
-    extractTextBtn.addEventListener("click", function () {
+    extractTextBtn.addEventListener("click", async function () {
         const file = ocrImageUpload.files[0];
 
         if (file) {
-            extractTextFromImage(file);
+            await extractTextFromImage(file);
+        }
+    });
+}
+
+if (newsForm) {
+    newsForm.addEventListener("submit", async function (event) {
+        const imageFile = ocrImageUpload?.files[0];
+        const newsText = document.getElementById("newsText");
+
+        if (!imageFile || newsText.value.trim()) {
+            return;
+        }
+
+        event.preventDefault();
+
+        const checkButton = document.getElementById("checkNews");
+        checkButton.disabled = true;
+
+        try {
+            await extractTextFromImage(imageFile);
+
+            if (newsText.value.trim()) {
+                newsForm.submit();
+            } else {
+                alert(
+                    "Image-il ninn text extract cheyyaan kazhinjilla. " +
+                    "Extract Text button use cheyyuka, allenkil text type cheyyuka."
+                );
+            }
+        } catch (error) {
+            console.error("Automatic OCR error:", error);
+            alert("OCR nadannilla. Extract Text button use cheythu nokku.");
+        } finally {
+            checkButton.disabled = false;
         }
     });
 }
