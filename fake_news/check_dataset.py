@@ -29,32 +29,39 @@ print(data["text"].iloc[0][:300])
 print("\nCleaned:")
 print(data["clean_text"].iloc[0][:300])
 
+
+from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 
+y = data["label"]
+
+# Aadyam data train-test aayi split cheyyuka
+X_train_text, X_test_text, y_train, y_test = train_test_split(
+    data["clean_text"],
+    y,
+    test_size=0.2,
+    random_state=42
+)
+
+# Vectorizer training text-il maathram fit cheyyuka
 vectorizer = TfidfVectorizer(
     max_features=10000,
     ngram_range=(1, 2),
     sublinear_tf=True
 )
 
-X = vectorizer.fit_transform(data["clean_text"])
+X_train = vectorizer.fit_transform(X_train_text)
+X_test = vectorizer.transform(X_test_text)
 
-print("\nTF-IDF shape:")
-print(X.shape)
+print("\nTF-IDF training shape:")
+print(X_train.shape)
 
-from sklearn.model_selection import train_test_split
-
-y = data["label"]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)
+print("TF-IDF testing shape:")
+print(X_test.shape)
 
 print("\nTraining data:", X_train.shape)
 print("Testing data:", X_test.shape)
+
 
 from sklearn.linear_model import LogisticRegression
 

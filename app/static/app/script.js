@@ -156,7 +156,7 @@ if (extractTextBtn && ocrStatus && imageUpload && newsText) {
 
         if (!file) {
             ocrStatus.style.display = "block";
-            ocrStatus.textContent = "Aadyam oru image upload cheyyuka.";
+            ocrStatus.textContent = "Please upload an image first.";
             return;
         }
 
@@ -165,7 +165,7 @@ if (extractTextBtn && ocrStatus && imageUpload && newsText) {
 
         extractTextBtn.disabled = true;
         ocrStatus.style.display = "block";
-        ocrStatus.textContent = "Image vaayikkunnu...";
+        ocrStatus.textContent = "Reading image...";
 
         try {
             const response = await fetch("/extract-image-text/", {
@@ -181,12 +181,12 @@ if (extractTextBtn && ocrStatus && imageUpload && newsText) {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || "Text extract cheyyan kazhinjilla.");
+                throw new Error(data.error || "Failed to extract text.");
             }
 
             newsText.value = data.text;
             ocrStatus.textContent =
-                "Text extract cheythu! News check cheyyunnathinu munpu text verify cheyyuka.";
+                "Text extracted successfully! Please verify the text before prediction.";
 
         } catch (error) {
             ocrStatus.textContent = error.message;
@@ -205,14 +205,14 @@ async function extractTextFromImage(file) {
     }
 
     status.style.display = "block";
-    status.textContent = "Image-il ninn text extract cheyyunnu...";
+    status.textContent = "Extracting text from the image...";
 
     try {
         const result = await Tesseract.recognize(file, "eng", {
             logger: (message) => {
                 if (message.status === "recognizing text") {
                     status.textContent =
-                        `Text vaayikkunnu: ${Math.round(message.progress * 100)}%`;
+                        `Reading text...: ${Math.round(message.progress * 100)}%`;
                 }
             }
         });
@@ -220,17 +220,17 @@ async function extractTextFromImage(file) {
         const extractedText = result.data.text.trim();
 
         if (!extractedText) {
-            status.textContent = "Image-il text kandethaan kazhinjilla.";
+            status.textContent = "Could not detect any text in the image.";
             return;
         }
 
         newsText.value = extractedText;
         status.textContent =
-            "Text extract cheythu! Prediction-nu munpu text verify cheyyuka.";
+            "Text extracted successfully! Please verify the text before prediction.";
 
     } catch (error) {
         status.textContent =
-            "OCR load cheyyaan kazhinjilla. Internet connection check cheyyuka.";
+            "OCR could not be loaded. Please check your internet connection.";
         console.error(error);
     }
 }
@@ -275,13 +275,13 @@ if (newsForm) {
                 newsForm.submit();
             } else {
                 alert(
-                    "Image-il ninn text extract cheyyaan kazhinjilla. " +
-                    "Extract Text button use cheyyuka, allenkil text type cheyyuka."
+                    "Failed to extract text from the image." +
+                    "Please use the Extract Text button or type the text manually."
                 );
             }
         } catch (error) {
             console.error("Automatic OCR error:", error);
-            alert("OCR nadannilla. Extract Text button use cheythu nokku.");
+            alert("OCR failed. Please try using the Extract Text button.");
         } finally {
             checkButton.disabled = false;
         }
