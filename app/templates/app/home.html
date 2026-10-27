@@ -1,8 +1,6 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,473 +9,396 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
 
-    <title>FakeCheck - AI Fake News Detection</title>
+    <title>TruthLens AI | News Verification</title>
 
     <link rel="stylesheet" href="{% static 'app/style.css' %}">
 </head>
 
-<body>
+<body class="truthlens-page">
 
-<!-- ================= NAVBAR ================= -->
-
+<!-- NAVIGATION -->
 <header class="navbar">
+    <a href="{% url 'home' %}" class="logo">
+        <span class="logo-icon">◈</span>
+        <span>TruthLens <span class="brand-accent">AI</span>
+            <small class="logo-caption">AI-POWERED NEWS VERIFICATION</small>
+        </span>
+    </a>
 
-    <div class="logo">
-        <span class="logo-icon">⌕</span>
-        <span>Fake<span>Check</span></span>
-    </div>
-
-    <nav> 
-        <a href="{% url 'home' %}" class="active">Home</a> 
-        <a href="{% url 'about' %}">About</a> 
-        <a href="{% url 'history' %}">History</a> 
+    <nav class="main-nav">
+        <a href="{% url 'home' %}" class="active">⌂ Home</a>
+        <a href="{% url 'history' %}">◷ History</a>
+        <a href="{% url 'about' %}">ⓘ About</a>
     </nav>
 
     <div class="user-area">
+        <button type="button" class="user-info" id="userMenuButton">
+            <span class="user-avatar">♙</span>
+            <span>Welcome, {{ request.user.first_name|default:request.user.username }}</span>
+            <span class="arrow">⌄</span>
+        </button>
 
-    <div class="user-info" id="userMenuButton">
-
-        <div class="user-avatar">
-            👤
+        <div class="user-dropdown" id="userDropdown">
+            <div class="dropdown-user">
+                <strong>{{ request.user.first_name|default:request.user.username }}</strong>
+                <small>{{ request.user.email }}</small>
+            </div>
+            <a href="{% url 'logout' %}">⇥ Logout</a>
         </div>
-
-        <span>
-            {{ request.user.first_name|default:request.user.username }}
-        </span>
-
-        <span class="arrow">
-            ⌄
-        </span>
-
     </div>
-
-
-    <div class="user-dropdown" id="userDropdown">
-
-        <div class="dropdown-user">
-            <strong>
-                {{ request.user.first_name|default:request.user.username }}
-            </strong>
-
-            <small>
-                {{ request.user.email }}
-            </small>
-        </div>
-
-        <a href="{% url 'logout' %}">
-            ⇥ Logout
-        </a>
-
-    </div>
-
-</div>
-
 </header>
 
+<main>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <span class="welcome-badge">AI-POWERED NEWS VERIFICATION</span>
 
-<!-- ================= HERO SECTION ================= -->
+                <h1>
+                    Verify Before<br>
+                    <span class="brand-accent">You Believe.</span>
+                </h1>
 
-<section class="hero">
+                <p>
+                    TruthLens AI helps you examine news content using
+                    machine learning. Enter a news article or upload an
+                    image to analyze its content.
+                </p>
 
-    <div class="hero-content">
-
-        <div class="hero-text">
-
-            <div class="welcome-badge">
-                👋 Welcome back, {{ request.user.first_name|default:request.user.username }}!
-            </div>
-
-            <h1>
-                Detect
-                <span>Fake News</span>
-                <br>
-                with AI
-            </h1>
-
-            <h2>
-                Verify information before you trust it.
-            </h2>
-
-            <p>
-                Paste a news article or upload an image and
-                let our AI analyze it to find out whether
-                it's <strong class="real">REAL</strong>
-                or <strong class="fake">FAKE</strong>.
-            </p>
-
-        </div>
-
-
-        <!-- RIGHT SIDE ILLUSTRATION -->
-
-        <div class="hero-illustration">
-
-            <div class="news-paper">
-
-                <div class="paper-title">
-                    NEWS
+                <div class="hero-points">
+                    <span>✳ AI Analysis</span>
+                    <span>▧ Text &amp; Image</span>
+                    <span>♢ Instant Results</span>
                 </div>
 
-                <div class="paper-lines"></div>
-                <div class="paper-lines"></div>
-                <div class="paper-lines"></div>
+                <a href="#news-analysis" class="primary-btn hero-cta">
+                    Start Analysis <span>→</span>
+                </a>
+            </div>
 
-                <div class="fake-stamp">
-                    FAKE
+            <div class="hero-visual" aria-hidden="true">
+                <div class="visual-orbit orbit-one"></div>
+                <div class="visual-orbit orbit-two"></div>
+                <div class="visual-shield">
+                    <span class="visual-check">✓</span>
+                    <span class="visual-label">NEWS AI</span>
+                </div>
+                <div class="visual-chip chip-real">REAL?</div>
+                <div class="visual-chip chip-fake">FAKE?</div>
+                <div class="visual-caption">ANALYZE · VERIFY · UNDERSTAND</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWS ANALYSIS -->
+    <section class="analysis-section" id="news-analysis">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">INTELLIGENT ANALYSIS</span>
+                <h2>News Verification Center</h2>
+                <p>Analyze text or extract it from a news image.</p>
+            </div>
+            <span class="secure-label">◇ AI Analysis</span>
+        </div>
+
+        <div class="analysis-layout">
+            <div class="news-card">
+                <div class="card-title">
+                    <span class="title-icon">▤</span>
+                    <div>
+                        <h3>Analyze News</h3>
+                        <p>Enter the content you want to examine.</p>
+                    </div>
                 </div>
 
+                <form method="POST"
+                      action="{% url 'check_news' %}"
+                      enctype="multipart/form-data"
+                      id="newsForm">
+
+                    {% csrf_token %}
+
+                    <label for="newsText" class="field-label">
+                        News Article Text
+                    </label>
+
+                    <textarea
+                        id="newsText"
+                        name="news_text"
+                        maxlength="5000"
+                        placeholder="Paste or type the news article here..."
+                    ></textarea>
+
+                    <div class="input-meta">
+                        <span>Enter the full article for analysis.</span>
+                        <span><span id="textCount">0</span>/5000</span>
+                    </div>
+
+                    <div id="ocrStatus"
+                         class="ocr-status"
+                         role="status"
+                         aria-live="polite"
+                         style="display:none; margin-top:10px;">
+                    </div>
+
+                    <!-- IMAGE PREVIEW: IDs preserved -->
+                    <div id="imagePreviewContainer"
+                         class="image-preview-container hidden">
+
+                        <img id="imagePreview" src="" alt="Selected news image">
+
+                        <div class="image-details">
+                            <span id="imageName">image.jpg</span>
+                            <small id="imageSize">0 KB</small>
+                        </div>
+
+                        <button type="button"
+                                id="removeImage"
+                                class="remove-image"
+                                aria-label="Remove selected image">×</button>
+                    </div>
+
+                    <!-- IMAGE UPLOAD -->
+                    <div class="upload-panel">
+                        <div class="upload-heading">
+                            <span class="upload-icon">▧</span>
+                            <div>
+                                <h4>Upload a News Image</h4>
+                                <p>Extract text from an image using OCR.</p>
+                            </div>
+                        </div>
+
+                        <label for="imageUpload" class="image-upload-btn">
+                            <span>＋</span> Choose Image
+                        </label>
+
+                        <input type="file"
+                               id="imageUpload"
+                               name="news_image"
+                               accept="image/png, image/jpeg, image/jpg"
+                               hidden>
+
+                        <p class="file-info">JPG or PNG · Maximum size 5 MB</p>
+
+                        <button type="button"
+                                id="extractTextBtn"
+                                class="secondary-btn"
+                                style="display:none; margin-top:12px;">
+                            ▧ Extract Text (OCR)
+                        </button>
+                    </div>
+
+                    <!-- FORM ACTIONS -->
+                    <div class="form-actions">
+                        <button type="submit"
+                                class="primary-btn"
+                                id="checkNews">
+                            ⌕ Analyze News
+                        </button>
+
+                        <button type="button"
+                                class="secondary-btn"
+                                id="clearNews">
+                            ↻ Clear
+                        </button>
+                    </div>
+                </form>
+
+                <!-- DJANGO PREDICTION RESULT -->
+                {% if prediction %}
+                <div class="prediction-result" aria-live="polite">
+                    <span class="eyebrow">ANALYSIS COMPLETE</span>
+                    <h3>Prediction Result</h3>
+
+                    <p>
+                        <strong>Prediction:</strong>
+                        {{ prediction }}
+                    </p>
+
+                    <p>
+                        <strong>Model Confidence:</strong>
+                        {{ confidence|floatformat:2 }}%
+                    </p>
+
+                    <p class="result-disclaimer">
+                        This is a machine-learning prediction, not a guarantee
+                        that the news is true or false.
+                    </p>
+                </div>
+                {% endif %}
             </div>
 
-            <div class="robot">
-                🤖
-            </div>
-
-            <div class="shield">
-                ✓
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================= NEWS INPUT CARD ================= -->
-
-    <div class="news-card">
-
-        <form method="POST" action="{% url 'check_news' %}" enctype="multipart/form-data">
-
-            {% csrf_token %}
-
-           <div class="card-title">
-            📰
-               <span>News Article</span>
-           </div>
-
-
-        <div class="news-input-wrapper">
-
-            <textarea
-                id="newsText"
-                name="news_text"
-                placeholder="Paste your news article here..."
-            ></textarea>
-
-        <div id="ocrStatus" style="display: none; margin-top: 10px;"></div>
-
-        <button
-            type="button"
-            id="extractTextBtn"
-            class="check-btn"
-            style="display: none; margin-top: 10px;">
-         Extract Text from Image
-        </button>
-            <!-- IMAGE PREVIEW -->
-
-            <div id="imagePreviewContainer"
-                 class="image-preview-container hidden">
-
-                <img id="imagePreview"
-                     src=""
-                     alt="Selected image">
-
-                <div class="image-details">
-
-                    <span id="imageName">
-                        image.jpg
-                    </span>
-
-                    <small id="imageSize">
-                        0 KB
-                    </small>
-
+            <!-- RIGHT SIDEBAR -->
+            <aside class="analysis-sidebar">
+                <div class="info-card">
+                    <span class="info-icon">01</span>
+                    <h3>Enter News</h3>
+                    <p>Paste an article or upload a news image.</p>
                 </div>
 
-                <button
-                    type="button"
-                    id="removeImage"
-                    class="remove-image">
-                    ×
-                </button>
+                <div class="info-card">
+                    <span class="info-icon">02</span>
+                    <h3>AI Processing</h3>
+                    <p>The trained model analyzes the supplied text.</p>
+                </div>
 
-            </div>
+                <div class="info-card">
+                    <span class="info-icon">03</span>
+                    <h3>Review Results</h3>
+                    <p>Check the prediction and its confidence score.</p>
+                </div>
 
+                <div class="notice-card">
+                    <span>ⓘ</span>
+                    <div>
+                        <strong>Important</strong>
+                        <p>Always verify important claims using reliable,
+                           independent sources.</p>
+                    </div>
+                </div>
 
-            <!-- INPUT ACTIONS -->
-
-            <div class="input-actions">
-
-                <span class="file-info">
-                    JPG, PNG (Max 5MB)
-                </span>
-
-                <label
-                    for="imageUpload"
-                    class="image-upload-btn">
-
-                    🖼️
-                    <span>Add Image</span>
-
-                </label>
-
-                <input type="file"
-                       id="imageUpload"
-                       name="news_image"
-                       accept="image/png, image/jpeg, image/jpg"
-                       hidden>
-
-            </div>
-
+                <a href="{% url 'history' %}" class="history-link">
+                    ◷ View Prediction History <span>→</span>
+                </a>
+            </aside>
         </div>
+    </section>
 
-
-        <!-- CHECK BUTTON -->
-
-        <button
-            type="submit"
-            class="check-btn"
-            id="checkNews">
-            🔍
-            Check News
-
-        </button>
-
-      </form>
-
-      
-{% if prediction %}
-<div class="prediction-result">
-    <h3>AI Prediction Result</h3>
-
-    <p>
-        <strong>Prediction:</strong>
-        {{ prediction }}
-    </p>
-
-    <p>
-        <strong>Confidence:</strong>
-        {{ confidence|floatformat:2 }}%
-    </p>
-</div>
-{% endif %}
-
-
-    </div>
-
-</section>
-
-
-<!-- ================= HOW IT WORKS ================= -->
-
-<section class="how-it-works" id="about">
-
-    <h2>How It Works</h2>
-
-    <div class="section-line"></div>
-
-
-    <div class="steps">
-
-        <div class="step">
-
-            <div class="step-icon blue">
-                📝
-            </div>
-
-            <h3>1. Enter News</h3>
-
-            <p>
-                Paste the news article or
-                upload an image.
-            </p>
-
-        </div>
-
-
-        <div class="arrow-between">
-            →
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-icon purple">
-                🤖
-            </div>
-
-            <h3>2. AI Analysis</h3>
-
-            <p>
-                Our AI analyzes the content
-                using machine learning.
-            </p>
-
-        </div>
-
-
-        <div class="arrow-between">
-            →
-        </div>
-
-
-        <div class="step">
-
-            <div class="step-icon green">
-                ✓
-            </div>
-
-            <h3>3. Get Result</h3>
-
-            <p>
-                Find out whether the news
-                is REAL or FAKE.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================= WHY FAKECHECK ================= -->
-
-<section class="why-section" id="history">
-
-    <h2>Why use FakeCheck?</h2>
-
-    <div class="section-line"></div>
-
-
-    <div class="features">
-
-        <div class="feature-card">
-
-            <div class="feature-icon purple-icon">
-                🧠
-            </div>
-
+    <!-- FEATURES -->
+    <section class="features-section">
+        <div class="section-heading">
             <div>
-                <h3>AI-Powered Analysis</h3>
-
-                <p>
-                    Uses machine learning
-                    to analyze news content.
-                </p>
+                <span class="eyebrow">BUILT FOR NEWS ANALYSIS</span>
+                <h2>Tools to Help You Verify</h2>
+                <p>Useful features in one simple workspace.</p>
             </div>
-
         </div>
 
+        <div class="features">
+            <article class="feature-card">
+                <span class="feature-icon">✳</span>
+                <h3>Machine Learning</h3>
+                <p>Analyze news text with the project's trained ML model.</p>
+            </article>
 
-        <div class="feature-card">
+            <article class="feature-card">
+                <span class="feature-icon">▧</span>
+                <h3>Image OCR</h3>
+                <p>Extract readable text from supported news images.</p>
+            </article>
 
-            <div class="feature-icon yellow-icon">
-                ⚡
-            </div>
-
-            <div>
-                <h3>Quick Prediction</h3>
-
-                <p>
-                    Get results quickly
-                    and easily.
-                </p>
-            </div>
-
+            <article class="feature-card">
+                <span class="feature-icon">◷</span>
+                <h3>Prediction History</h3>
+                <p>Review and manage your previous analyses.</p>
+                <a href="{% url 'history' %}">Open History →</a>
+            </article>
         </div>
+    </section>
+</main>
 
+<!-- FOOTER -->
+<footer class="site-footer">
+    <a href="{% url 'home' %}" class="footer-brand">
+        TruthLens <span class="brand-accent">AI</span>
+    </a>
 
-        <div class="feature-card">
-
-            <div class="feature-icon green-icon">
-                🛡️
-            </div>
-
-            <div>
-                <h3>Simple & Easy</h3>
-
-                <p>
-                    Just paste or upload
-                    and check.
-                </p>
-            </div>
-
-        </div>
-
-
-        <div class="feature-card">
-
-            <div class="feature-icon pink-icon">
-                👥
-            </div>
-
-            <div>
-                <h3>Helpful Results</h3>
-
-                <p>
-                    Understand news before
-                    trusting or sharing it.
-                </p>
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-    <div class="footer-logo">
-        Fake<span>Check</span>
-    </div>
-
-    <p>
-        AI-Powered Fake News Detection
-    </p>
+    <p>AI-powered news analysis to encourage informed decisions.</p>
 
     <div class="footer-links">
-
-        <a href="#">Home</a>
-        <a href="#about">About</a>
-        <a href="#history">History</a>
-        <a href="#">Contact</a>
-
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'history' %}">History</a>
     </div>
 
     <p class="copyright">
-        © 2026 FakeCheck. All rights reserved.
+        © 2026 TruthLens AI. For informational purposes only.
     </p>
-
 </footer>
 
-
-<!-- ================= JAVASCRIPT ================= -->
+<!-- USER MENU -->
 <script>
     const userMenuButton = document.getElementById("userMenuButton");
     const userDropdown = document.getElementById("userDropdown");
 
-    userMenuButton.addEventListener("click", function () {
-        userDropdown.classList.toggle("show");
-    });
+    if (userMenuButton && userDropdown) {
+        userMenuButton.addEventListener("click", function (event) {
+            event.stopPropagation();
+            userDropdown.classList.toggle("show");
+        });
 
-    document.addEventListener("click", function (event) {
+        document.addEventListener("click", function (event) {
+            if (!userMenuButton.contains(event.target) &&
+                !userDropdown.contains(event.target)) {
+                userDropdown.classList.remove("show");
+            }
+        });
+    }
 
-        if (
-            !userMenuButton.contains(event.target) &&
-            !userDropdown.contains(event.target)
-        ) {
-            userDropdown.classList.remove("show");
+    // Character count
+    const newsText = document.getElementById("newsText");
+    const textCount = document.getElementById("textCount");
+
+    if (newsText && textCount) {
+        function updateTextCount() {
+            textCount.textContent = newsText.value.length;
         }
 
-    });
+        newsText.addEventListener("input", updateTextCount);
+        updateTextCount();
+    }
+
+    // Clear text and selected image
+    const clearNews = document.getElementById("clearNews");
+    const imageUpload = document.getElementById("imageUpload");
+    const removeImage = document.getElementById("removeImage");
+    const imagePreviewContainer =
+        document.getElementById("imagePreviewContainer");
+    const imagePreview = document.getElementById("imagePreview");
+    const imageName = document.getElementById("imageName");
+    const imageSize = document.getElementById("imageSize");
+    const extractTextBtn = document.getElementById("extractTextBtn");
+    const ocrStatus = document.getElementById("ocrStatus");
+
+    function clearSelectedImage() {
+        if (imageUpload) imageUpload.value = "";
+
+        if (imagePreview) imagePreview.removeAttribute("src");
+
+        if (imagePreviewContainer) {
+            imagePreviewContainer.classList.add("hidden");
+        }
+
+        if (extractTextBtn) extractTextBtn.style.display = "none";
+
+        if (imageName) imageName.textContent = "";
+        if (imageSize) imageSize.textContent = "";
+    }
+
+    if (clearNews) {
+        clearNews.addEventListener("click", function () {
+            if (newsText) newsText.value = "";
+            if (textCount) textCount.textContent = "0";
+
+            clearSelectedImage();
+
+            if (ocrStatus) {
+                ocrStatus.textContent = "";
+                ocrStatus.style.display = "none";
+            }
+        });
+    }
+
+    // Do not remove the existing image handler in script.js.
+    // This button provides an additional way to remove the selected image.
+    if (removeImage) {
+        removeImage.addEventListener("click", clearSelectedImage);
+    }
 </script>
 
-<script src="{% static 'app/script.js' %}"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="{% static 'app/script.js' %}"></script>
 
 </body>
 </html>

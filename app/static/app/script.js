@@ -1,289 +1,213 @@
-// =========================
-// IMAGE UPLOAD
-// =========================
 
-const imageUpload = document.getElementById("imageUpload");
+document.addEventListener("DOMContentLoaded", function () {
+    const imageUpload = document.getElementById("imageUpload");
+    const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+    const imagePreview = document.getElementById("imagePreview");
+    const imageName = document.getElementById("imageName");
+    const imageSize = document.getElementById("imageSize");
+    const removeImage = document.getElementById("removeImage");
 
-const imagePreviewContainer =
-    document.getElementById("imagePreviewContainer");
+    const extractTextBtn = document.getElementById("extractTextBtn");
+    const ocrStatus = document.getElementById("ocrStatus");
+    const newsText = document.getElementById("newsText");
+    const newsForm = document.getElementById("newsForm");
+    const checkNews = document.getElementById("checkNews");
 
-const imagePreview =
-    document.getElementById("imagePreview");
+    // IMAGE UPLOAD + PREVIEW
+    if (imageUpload) {
+        imageUpload.addEventListener("change", function () {
+            const file = this.files[0];
 
-const imageName =
-    document.getElementById("imageName");
+            if (!file) {
+                clearImagePreview();
+                return;
+            }
 
-const imageSize =
-    document.getElementById("imageSize");
+            if (!file.type.startsWith("image/")) {
+                alert("Please select an image file.");
+                this.value = "";
+                clearImagePreview();
+                return;
+            }
 
-const removeImage =
-    document.getElementById("removeImage");
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Image size must be less than 5 MB.");
+                this.value = "";
+                clearImagePreview();
+                return;
+            }
 
+            if (imagePreview && imagePreviewContainer) {
+                imagePreview.src = URL.createObjectURL(file);
+                imagePreviewContainer.classList.remove("hidden");
+            }
 
-// When user selects an image
-imageUpload.addEventListener("change", function () {
+            if (imageName) imageName.textContent = file.name;
+            if (imageSize) {
+                imageSize.textContent =
+                    (file.size / 1024).toFixed(1) + " KB";
+            }
 
-    const file = this.files[0];
+            if (extractTextBtn) {
+                extractTextBtn.style.display = "inline-flex";
+            }
 
-    // No file selected
-    if (!file) {
-        return;
+            if (ocrStatus) {
+                ocrStatus.style.display = "none";
+                ocrStatus.textContent = "";
+            }
+        });
     }
 
-
-    // Check file type
-    if (!file.type.startsWith("image/")) {
-
-        alert("Please select an image file.");
-
-        this.value = "";
-
-        return;
-    }
-
-
-    // Check file size
-    if (file.size > 5 * 1024 * 1024) {
-
-        alert("Image size must be less than 5 MB.");
-
-        this.value = "";
-
-        return;
-    }
-
-
-    // Read selected image
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-
-        // Show image preview
-        imagePreview.src = event.target.result;
-
-        // Show image name
-        imageName.textContent = file.name;
-
-        // Show image size
-        imageSize.textContent =
-            (file.size / 1024).toFixed(1) + " KB";
-
-        // Make preview visible
-        imagePreviewContainer.classList.remove("hidden");
-    };
-
-    reader.readAsDataURL(file);
-
-});
-
-
-// =========================
-// REMOVE IMAGE
-// =========================
-
-removeImage.addEventListener("click", function () {
-
-    // Clear selected file
-    imageUpload.value = "";
-
-    // Clear preview
-    imagePreview.src = "";
-
-    // Hide preview box
-    imagePreviewContainer.classList.add("hidden");
-
-});
-
-
-// =========================
-// CHECK NEWS BUTTON
-// =========================
-
-const checkNews =
-    document.getElementById("checkNews");
-
-checkNews.addEventListener("click", function () {
-
-    const newsText =
-        document.getElementById("newsText").value.trim();
-
-    const image =
-        imageUpload.files[0];
-
-
-    // Check whether user entered anything
-    if (newsText === "" && !image) {
-
-        alert(
-            "Please enter a news article or upload an image."
-        );
-
-        return;
-    }
-
-
-    // Temporary message
-    // ML model will be connected later
-
-
-});
-
-
-function togglePassword(inputId, button) {
-    const passwordInput = document.getElementById(inputId);
-
-    if (!passwordInput) return;
-
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        button.textContent = "Hide";
-        button.setAttribute("aria-label", "Hide password");
-    } else {
-        passwordInput.type = "password";
-        button.textContent = "Show";
-        button.setAttribute("aria-label", "Show password");
-    }
-}
-
-
-const extractTextBtn = document.getElementById("extractTextBtn");
-const ocrStatus = document.getElementById("ocrStatus");
-const newsText = document.getElementById("newsText");
-
-if (extractTextBtn && ocrStatus && imageUpload && newsText) {
-    extractTextBtn.addEventListener("click", async function () {
-        const file = imageUpload.files[0];
-
-        if (!file) {
-            ocrStatus.style.display = "block";
-            ocrStatus.textContent = "Please upload an image first.";
-            return;
+    // CLEAR IMAGE PREVIEW
+    function clearImagePreview() {
+        if (imagePreview) {
+            if (imagePreview.src.startsWith("blob:")) {
+                URL.revokeObjectURL(imagePreview.src);
+            }
+            imagePreview.removeAttribute("src");
         }
 
-        const formData = new FormData();
-        formData.append("news_image", file);
+        if (imagePreviewContainer) {
+            imagePreviewContainer.classList.add("hidden");
+        }
 
-        extractTextBtn.disabled = true;
+        if (imageName) imageName.textContent = "";
+        if (imageSize) imageSize.textContent = "";
+
+        if (extractTextBtn) {
+            extractTextBtn.style.display = "none";
+        }
+    }
+
+    // REMOVE IMAGE
+    if (removeImage) {
+        removeImage.addEventListener("click", function () {
+            if (imageUpload) imageUpload.value = "";
+            clearImagePreview();
+        });
+    }
+
+    // OCR USING TESSERACT.JS
+    async function extractTextFromImage(file) {
+        if (!file || !newsText || !ocrStatus) return false;
+
         ocrStatus.style.display = "block";
         ocrStatus.textContent = "Reading image...";
 
+        if (typeof Tesseract === "undefined") {
+            ocrStatus.textContent =
+                "OCR could not be loaded. Please check your internet connection.";
+            return false;
+        }
+
         try {
-            const response = await fetch("/extract-image-text/", {
-                method: "POST",
-                headers: {
-                    "X-CSRFToken": document.querySelector(
-                        "[name=csrfmiddlewaretoken]"
-                    ).value
-                },
-                body: formData
+            const result = await Tesseract.recognize(file, "eng", {
+                logger: function (message) {
+                    if (message.status === "recognizing text") {
+                        ocrStatus.textContent =
+                            "Reading text... " +
+                            Math.round(message.progress * 100) + "%";
+                    }
+                }
             });
 
-            const data = await response.json();
+            const extractedText = result.data.text.trim();
 
-            if (!response.ok) {
-                throw new Error(data.error || "Failed to extract text.");
+            if (!extractedText) {
+                ocrStatus.textContent =
+                    "Could not detect any text in the image.";
+                return false;
             }
 
-            newsText.value = data.text;
+            newsText.value = extractedText;
+            newsText.dispatchEvent(new Event("input", { bubbles: true }));
+
             ocrStatus.textContent =
                 "Text extracted successfully! Please verify the text before prediction.";
 
+            return true;
+
         } catch (error) {
-            ocrStatus.textContent = error.message;
-        } finally {
-            extractTextBtn.disabled = false;
+            console.error("OCR error:", error);
+            ocrStatus.textContent =
+                "Text extraction failed. Please try another image.";
+            return false;
         }
-    });
-}
-
-async function extractTextFromImage(file) {
-    const status = document.getElementById("ocrStatus");
-    const newsText = document.getElementById("newsText");
-
-    if (!file || !status || !newsText) {
-        return;
     }
 
-    status.style.display = "block";
-    status.textContent = "Extracting text from the image...";
+    // EXTRACT TEXT BUTTON — only one click handler
+    if (extractTextBtn) {
+        extractTextBtn.addEventListener("click", async function () {
+            const file = imageUpload?.files[0];
 
-    try {
-        const result = await Tesseract.recognize(file, "eng", {
-            logger: (message) => {
-                if (message.status === "recognizing text") {
-                    status.textContent =
-                        `Reading text...: ${Math.round(message.progress * 100)}%`;
+            if (!file) {
+                if (ocrStatus) {
+                    ocrStatus.style.display = "block";
+                    ocrStatus.textContent =
+                        "Please upload an image first.";
                 }
+                return;
+            }
+
+            extractTextBtn.disabled = true;
+
+            try {
+                await extractTextFromImage(file);
+            } finally {
+                extractTextBtn.disabled = false;
             }
         });
-
-        const extractedText = result.data.text.trim();
-
-        if (!extractedText) {
-            status.textContent = "Could not detect any text in the image.";
-            return;
-        }
-
-        newsText.value = extractedText;
-        status.textContent =
-            "Text extracted successfully! Please verify the text before prediction.";
-
-    } catch (error) {
-        status.textContent =
-            "OCR could not be loaded. Please check your internet connection.";
-        console.error(error);
     }
-}
 
-const ocrImageUpload = document.getElementById("imageUpload");
-const checkNewsButton = document.getElementById("checkNews");
-const newsForm = document.querySelector("form");
+    // AUTOMATIC OCR WHEN SUBMITTING AN IMAGE WITHOUT TEXT
+    if (newsForm) {
+        newsForm.addEventListener("submit", async function (event) {
+            const imageFile = imageUpload?.files[0];
 
-if (ocrImageUpload && extractTextBtn) {
-    ocrImageUpload.addEventListener("change", function () {
-        extractTextBtn.style.display =
-            ocrImageUpload.files.length > 0 ? "block" : "none";
-    });
+            if (!imageFile || newsText.value.trim()) {
+                return;
+            }
 
-    extractTextBtn.addEventListener("click", async function () {
-        const file = ocrImageUpload.files[0];
+            event.preventDefault();
 
-        if (file) {
-            await extractTextFromImage(file);
-        }
-    });
-}
+            if (checkNews) checkNews.disabled = true;
 
-if (newsForm) {
-    newsForm.addEventListener("submit", async function (event) {
-        const imageFile = ocrImageUpload?.files[0];
-        const newsText = document.getElementById("newsText");
+            try {
+                const success = await extractTextFromImage(imageFile);
 
-        if (!imageFile || newsText.value.trim()) {
-            return;
-        }
+                if (success && newsText.value.trim()) {
+                    newsForm.submit();
+                } else {
+                    alert(
+                        "OCR failed. Please use the Extract Text button or type the text manually."
+                    );
+                }
+            } finally {
+                if (checkNews) checkNews.disabled = false;
+            }
+        });
+    }
 
-        event.preventDefault();
+    // CLEAR BUTTON
+    const clearNews = document.getElementById("clearNews");
 
-        const checkButton = document.getElementById("checkNews");
-        checkButton.disabled = true;
-
-        try {
-            await extractTextFromImage(imageFile);
-
-            if (newsText.value.trim()) {
-                newsForm.submit();
-            } else {
-                alert(
-                    "Failed to extract text from the image." +
-                    "Please use the Extract Text button or type the text manually."
+    if (clearNews) {
+        clearNews.addEventListener("click", function () {
+            if (newsText) {
+                newsText.value = "";
+                newsText.dispatchEvent(
+                    new Event("input", { bubbles: true })
                 );
             }
-        } catch (error) {
-            console.error("Automatic OCR error:", error);
-            alert("OCR failed. Please try using the Extract Text button.");
-        } finally {
-            checkButton.disabled = false;
-        }
-    });
-}
+
+            if (imageUpload) imageUpload.value = "";
+            clearImagePreview();
+
+            if (ocrStatus) {
+                ocrStatus.textContent = "";
+                ocrStatus.style.display = "none";
+            }
+        });
+    }
+});
